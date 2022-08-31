@@ -823,7 +823,7 @@ namespace CameraControl.Devices.Canon
             Camera.PictureTaken -= Camera_PictureTaken;
             Camera.PropertyChanged -= Camera_PropertyChanged;
             // this block the application
-            //Camera.Dispose();
+            Camera.Dispose();
             Camera = null;
         }
 
