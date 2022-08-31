@@ -3,8 +3,8 @@ using System.Threading;
 using Canon.Eos.Framework.Eventing;
 using Canon.Eos.Framework.Helper;
 using Canon.Eos.Framework.Internal;
-using Canon.Eos.Framework.Internal.SDK;
 using Canon.Eos.Framework.Threading;
+using EDSDKLib;
 
 namespace Canon.Eos.Framework
 {
@@ -76,10 +76,10 @@ namespace Canon.Eos.Framework
             var memoryStream = IntPtr.Zero;
             try
             {
-                Edsdk.EdsCreateMemoryStream(0, out memoryStream);
+                EDSDK.EdsCreateMemoryStream(0, out memoryStream);
                 using (var image = EosLiveImage.CreateFromStream(memoryStream))
                 {
-                    Edsdk.EdsDownloadEvfImage(this.Handle, image.Handle);
+                    EDSDK.EdsDownloadEvfImage(this.Handle, image.Handle);
 
                     var converter = new EosConverter();
                     this.OnLiveViewUpdate(
@@ -104,7 +104,7 @@ namespace Canon.Eos.Framework
             finally
             {
                 if (memoryStream != IntPtr.Zero)
-                    Edsdk.EdsRelease(memoryStream);
+                    EDSDK.EdsRelease(memoryStream);
             }
             return true;
         }
@@ -155,7 +155,7 @@ namespace Canon.Eos.Framework
             EosFramework.LogInstance.Debug("OnPropertyEventPropertyChanged: " + propertyId);
             switch (propertyId)
             {
-                case Edsdk.PropID_Evf_OutputDevice:
+                case EDSDK.PropID_Evf_OutputDevice:
                     this.OnPropertyEventPropertyEvfOutputDeviceChanged(param, context);
                     break;
             }
@@ -173,15 +173,15 @@ namespace Canon.Eos.Framework
             EosFramework.LogInstance.Debug("HandlePropertyEvent fired: " + propertyEvent + ", id: " + propertyId);
             switch (propertyEvent)
             {
-                case Edsdk.PropertyEvent_PropertyChanged:
+                case EDSDK.PropertyEvent_PropertyChanged:
                     this.OnPropertyEventPropertyChanged(propertyId, param, context);
                     break;
 
-                case Edsdk.PropertyEvent_PropertyDescChanged:
+                case EDSDK.PropertyEvent_PropertyDescChanged:
                     this.OnPropertyEventPropertyDescChanged(propertyId, param, context);
                     break;
             }
-            return Edsdk.EDS_ERR_OK;
+            return EDSDK.EDS_ERR_OK;
         }        
     }
 }

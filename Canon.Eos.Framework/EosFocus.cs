@@ -1,11 +1,11 @@
 ﻿using System.Drawing;
-using Canon.Eos.Framework.Internal.SDK;
+using EDSDKLib;
 
 namespace Canon.Eos.Framework
 {
     public struct EosFocus
     {
-        internal static EosFocus Create(Edsdk.EdsFocusInfo focus)
+        internal static EosFocus Create(EDSDK.EdsFocusInfo focus)
         {
             var focusPoints = new EosFocusPoint[focus.pointNumber];
             for (var i = 0; i < focusPoints.Length; ++i)

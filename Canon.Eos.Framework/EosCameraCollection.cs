@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Canon.Eos.Framework.Helper;
-using Canon.Eos.Framework.Internal.SDK;
+using EDSDKLib;
 
 namespace Canon.Eos.Framework
 {
@@ -12,13 +12,13 @@ namespace Canon.Eos.Framework
 
         internal EosCameraCollection()
         {
-            Util.Assert(Edsdk.EdsGetCameraList(out _cameraList), "Failed to get cameras.");
+            Util.Assert(EDSDK.EdsGetCameraList(out _cameraList), "Failed to get cameras.");
         }
 
         protected internal override void DisposeUnmanaged()
         {
             if (_cameraList != IntPtr.Zero)
-                Edsdk.EdsRelease(_cameraList);
+                EDSDK.EdsRelease(_cameraList);
             base.DisposeUnmanaged();
         }
 
@@ -31,7 +31,7 @@ namespace Canon.Eos.Framework
             {
                 this.CheckDisposed();
                 if(_count < 0)                
-                    Edsdk.EdsGetChildCount(_cameraList, out _count);
+                    EDSDK.EdsGetChildCount(_cameraList, out _count);
                 return _count;
             }
         }
@@ -48,9 +48,9 @@ namespace Canon.Eos.Framework
                     throw new IndexOutOfRangeException();
 
                 IntPtr camera;
-                Util.Assert(Edsdk.EdsGetChildAtIndex(_cameraList, index, out camera), string.Format("Failed to get camera #{0}.", index+1));
+                Util.Assert(EDSDK.EdsGetChildAtIndex(_cameraList, index, out camera), string.Format("Failed to get camera #{0}.", index+1));
                 if (camera == IntPtr.Zero)
-                    throw new EosException(Edsdk.EDS_ERR_DEVICE_NOT_FOUND, string.Format("Failed to get camera #{0}.", index+1));
+                    throw new EosException(EDSDK.EDS_ERR_DEVICE_NOT_FOUND, string.Format("Failed to get camera #{0}.", index+1));
                 return new EosCamera(camera);
             }
         }

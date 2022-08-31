@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using Canon.Eos.Framework.Helper;
 using Canon.Eos.Framework.Interfaces;
-using Canon.Eos.Framework.Internal.SDK;
+using EDSDKLib;
 
 namespace Canon.Eos.Framework.Internal
 {
@@ -11,10 +11,10 @@ namespace Canon.Eos.Framework.Internal
         public byte[] ConvertImageStreamToBytes(IntPtr imageStream)
         {
             IntPtr imagePtr;
-            Util.Assert(Edsdk.EdsGetPointer(imageStream, out imagePtr), "Failed to get image pointer.");
+            Util.Assert(EDSDK.EdsGetPointer(imageStream, out imagePtr), "Failed to get image pointer.");
             
             UInt64 imageLen;
-            Util.Assert(Edsdk.EdsGetLength(imageStream, out imageLen), "Failed to get image pointer length.");
+            Util.Assert(EDSDK.EdsGetLength(imageStream, out imageLen), "Failed to get image pointer length.");
 
             var bytes = new byte[imageLen];
             Marshal.Copy(imagePtr, bytes, 0, bytes.Length);

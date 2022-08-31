@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
-using Canon.Eos.Framework.Internal.SDK;
+using EDSDKLib;
 
 namespace Canon.Eos.Framework.Helper
 {
@@ -19,7 +19,7 @@ namespace Canon.Eos.Framework.Helper
 
         public static bool HasFailed(uint result)
         {
-            return result != Edsdk.EDS_ERR_OK;
+            return result != EDSDK.EDS_ERR_OK;
         }
 
         public static void Assert(uint result, string message)

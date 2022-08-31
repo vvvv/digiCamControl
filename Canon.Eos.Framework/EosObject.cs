@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Canon.Eos.Framework.Helper;
-using Canon.Eos.Framework.Internal.SDK;
+using EDSDKLib;
 
 namespace Canon.Eos.Framework
 {
@@ -26,40 +26,40 @@ namespace Canon.Eos.Framework
         /// <summary>
         /// Gets the artist.
         /// </summary>
-        [EosProperty(Edsdk.PropID_Artist)]
+        [EosProperty(EDSDK.PropID_Artist)]
         public string Artist
         {
-            get { return this.GetPropertyStringData(Edsdk.PropID_Artist); }
+            get { return this.GetPropertyStringData(EDSDK.PropID_Artist); }
         }
 
         /// <summary>
         /// Gets the copyright.
         /// </summary>
-        [EosProperty(Edsdk.PropID_Copyright)]
+        [EosProperty(EDSDK.PropID_Copyright)]
         public string Copyright
         {
-            get { return this.GetPropertyStringData(Edsdk.PropID_Copyright); }
+            get { return this.GetPropertyStringData(EDSDK.PropID_Copyright); }
         }
 
         /// <summary>
         /// Gets the focus.
         /// </summary>
-        [EosProperty(Edsdk.PropID_FocusInfo)]
+        [EosProperty(EDSDK.PropID_FocusInfo)]
         public EosFocus Focus
         {
             get 
-            {   return EosFocus.Create(this.GetPropertyStruct<Edsdk.EdsFocusInfo>(Edsdk.PropID_FocusInfo, 
-                    Edsdk.EdsDataType.FocusInfo));
+            {   return EosFocus.Create(this.GetPropertyStruct<EDSDK.EdsFocusInfo>(EDSDK.PropID_FocusInfo,
+                    EDSDK.EdsDataType.FocusInfo));
             }
         }
 
         /// <summary>
         /// Gets the firmware version.
         /// </summary>
-        [EosProperty(Edsdk.PropID_FirmwareVersion)]
+        [EosProperty(EDSDK.PropID_FirmwareVersion)]
         public string FirmwareVersion
         {
-            get { return this.GetPropertyStringData(Edsdk.PropID_FirmwareVersion); }
+            get { return this.GetPropertyStringData(EDSDK.PropID_FirmwareVersion); }
         }
 
         /// <summary>
@@ -68,10 +68,10 @@ namespace Canon.Eos.Framework
         /// <value>
         /// The name of the owner.
         /// </value>
-        [EosProperty(Edsdk.PropID_OwnerName)]
+        [EosProperty(EDSDK.PropID_OwnerName)]
         public string OwnerName
         {
-            get { return this.GetPropertyStringData(Edsdk.PropID_OwnerName); }
+            get { return this.GetPropertyStringData(EDSDK.PropID_OwnerName); }
         }
 
         /// <summary>
@@ -80,19 +80,19 @@ namespace Canon.Eos.Framework
         /// <value>
         /// The name of the product.
         /// </value>
-        [EosProperty(Edsdk.PropID_ProductName)]
+        [EosProperty(EDSDK.PropID_ProductName)]
         public string ProductName
         {
-            get { return this.GetPropertyStringData(Edsdk.PropID_ProductName); }
+            get { return this.GetPropertyStringData(EDSDK.PropID_ProductName); }
         }
 
         /// <summary>
         /// Gets the serial number.
         /// </summary>
-        [EosProperty(Edsdk.PropID_BodyIDEx)]
+        [EosProperty(EDSDK.PropID_BodyIDEx)]
         public string SerialNumber
         {
-            get { return this.GetPropertyStringData(Edsdk.PropID_BodyIDEx); }
+            get { return this.GetPropertyStringData(EDSDK.PropID_BodyIDEx); }
         }
 
         /// <summary>
@@ -101,17 +101,17 @@ namespace Canon.Eos.Framework
         /// <value>
         /// The white balance.
         /// </value>
-        [EosProperty(Edsdk.PropID_WhiteBalance)]
+        [EosProperty(EDSDK.PropID_WhiteBalance)]
         public EosWhiteBalance WhiteBalance
         {
-            get { return (EosWhiteBalance)this.GetPropertyIntegerData(Edsdk.PropID_WhiteBalance); }
-            set { this.SetPropertyIntegerData(Edsdk.PropID_WhiteBalance, (long)value); }
+            get { return (EosWhiteBalance)this.GetPropertyIntegerData(EDSDK.PropID_WhiteBalance); }
+            set { this.SetPropertyIntegerData(EDSDK.PropID_WhiteBalance, (long)value); }
         }
         
         protected internal override void DisposeUnmanaged()
         {
             if(_handle != IntPtr.Zero)
-                Edsdk.EdsRelease(_handle);
+                EDSDK.EdsRelease(_handle);
             base.DisposeUnmanaged();
         }
 
@@ -129,20 +129,20 @@ namespace Canon.Eos.Framework
         }
         
 
-        internal int GetPropertyDataSize(uint propertyId, Edsdk.EdsDataType expectedDataType)
+        internal int GetPropertyDataSize(uint propertyId, EDSDK.EdsDataType expectedDataType)
         {
             return this.ExecuteGetter(() =>
             {
                 int dataSize;
-                Edsdk.EdsDataType dataType;
-                Util.Assert(Edsdk.EdsGetPropertySize(this.Handle, propertyId, 0, out dataType, out dataSize),
+                EDSDK.EdsDataType dataType;
+                Util.Assert(EDSDK.EdsGetPropertySize(this.Handle, propertyId, 0, out dataType, out dataSize),
                     "Failed to get property size.", propertyId);
                 //Util.AssertIf(expectedDataType != dataType, "DataType mismatch: Expected <{0}>, Actual <{1}>", expectedDataType, dataType);
                 return dataSize;
             });
         }
 
-        internal T GetPropertyStruct<T>(uint propertyId, Edsdk.EdsDataType expectedDataType) where T: struct
+        internal T GetPropertyStruct<T>(uint propertyId, EDSDK.EdsDataType expectedDataType) where T: struct
         {
             return this.ExecuteGetter(() =>
             {
@@ -150,7 +150,7 @@ namespace Canon.Eos.Framework
                 var ptr = Marshal.AllocHGlobal(dataSize);
                 try
                 {
-                    Util.Assert(Edsdk.EdsGetPropertyData(this.Handle, propertyId, 0, dataSize, ptr),
+                    Util.Assert(EDSDK.EdsGetPropertyData(this.Handle, propertyId, 0, dataSize, ptr),
                         "Failed to get required struct.", propertyId);
                     return (T)Marshal.PtrToStructure(ptr, typeof(T));
                 }
@@ -167,7 +167,7 @@ namespace Canon.Eos.Framework
             {
                 try
                 {
-                    Util.Assert(Edsdk.EdsSetPropertyData(this.Handle, propertyId, 0, Marshal.SizeOf((object)data), (object)data),
+                    Util.Assert(EDSDK.EdsSetPropertyData(this.Handle, propertyId, 0, Marshal.SizeOf((object)data), (object)data),
                         string.Format("Failed to set property string data: propertyId {0}, data {1}", propertyId, data),
                         propertyId, data);
                 }
@@ -177,12 +177,12 @@ namespace Canon.Eos.Framework
                 }
             });
         }
-        public Edsdk.EdsPropertyDesc GetPropertyDescription(uint propertyId)
+        public EDSDK.EdsPropertyDesc GetPropertyDescription(uint propertyId)
         {
             return this.ExecuteGetter(() =>
             {
-                Edsdk.EdsPropertyDesc desc;
-                Util.Assert(Edsdk.EdsGetPropertyDesc(this.Handle, propertyId, out desc),
+                EDSDK.EdsPropertyDesc desc;
+                Util.Assert(EDSDK.EdsGetPropertyDesc(this.Handle, propertyId, out desc),
                     string.Format("Failed to get property description for data: propertyId {0}", propertyId), propertyId);
                 return desc;
             });
@@ -193,7 +193,7 @@ namespace Canon.Eos.Framework
             return this.ExecuteGetter(() =>
             {
                 uint data;
-                Util.Assert(Edsdk.EdsGetPropertyData(this.Handle, propertyId, 0, out data),
+                Util.Assert(EDSDK.EdsGetPropertyData(this.Handle, propertyId, 0, out data),
                     string.Format("Failed to get property integer data: propertyId {0}", propertyId), propertyId);
                 return data;
             });
@@ -201,19 +201,19 @@ namespace Canon.Eos.Framework
 
         protected Point GetPropertyPointData(uint propertyId)
         {
-            var point = this.GetPropertyStruct<Edsdk.EdsPoint>(propertyId, Edsdk.EdsDataType.Point);
+            var point = this.GetPropertyStruct<EDSDK.EdsPoint>(propertyId, EDSDK.EdsDataType.Point);
             return new Point { X = point.x, Y = point.y };
         }
 
         protected Size GetPropertySizeData(uint propertyId)
         {
-            var point = this.GetPropertyStruct<Edsdk.EdsSize>(propertyId, Edsdk.EdsDataType.Point);
+            var point = this.GetPropertyStruct<EDSDK.EdsSize>(propertyId, EDSDK.EdsDataType.Point);
             return new Size { Width = point.width, Height = point.height };
         }
 
         protected Rectangle GetPropertyRectangleData(uint propertyId)
         {
-            var rect = this.GetPropertyStruct<Edsdk.EdsRect>(propertyId, Edsdk.EdsDataType.Rect);
+            var rect = this.GetPropertyStruct<EDSDK.EdsRect>(propertyId, EDSDK.EdsDataType.Rect);
             return new Rectangle { X = rect.x, Y = rect.y, Height = rect.height, Width = rect.width };
         }
 
@@ -221,11 +221,11 @@ namespace Canon.Eos.Framework
         {
             return this.ExecuteGetter(() =>
             {
-                var dataSize = this.GetPropertyDataSize(propertyId, Edsdk.EdsDataType.UInt32_Array);
+                var dataSize = this.GetPropertyDataSize(propertyId, EDSDK.EdsDataType.UInt32_Array);
                 var ptr = Marshal.AllocHGlobal(dataSize);
                 try
                 {
-                    Util.Assert(Edsdk.EdsGetPropertyData(this.Handle, propertyId, 0, dataSize, ptr),
+                    Util.Assert(EDSDK.EdsGetPropertyData(this.Handle, propertyId, 0, dataSize, ptr),
                         "Failed to get required struct.", propertyId);
 
                     var signed = new int[dataSize / Marshal.SizeOf(typeof(uint))];
@@ -244,7 +244,7 @@ namespace Canon.Eos.Framework
             return this.ExecuteGetter(() =>
             {
                 string data;
-                Util.Assert(Edsdk.EdsGetPropertyData(this.Handle, propertyId, 0, out data),
+                Util.Assert(EDSDK.EdsGetPropertyData(this.Handle, propertyId, 0, out data),
                     string.Format("Failed to get property string data: propertyId {0}", propertyId), propertyId);
                 return data;
             });
@@ -252,14 +252,14 @@ namespace Canon.Eos.Framework
         
         protected void SetPropertyIntegerData(uint propertyId, long data)
         {
-            this.ExecuteSetter(() => Util.Assert(Edsdk.EdsSetPropertyData(this.Handle, propertyId, 0, Marshal.SizeOf(typeof(uint)), (uint)data),
+            this.ExecuteSetter(() => Util.Assert(EDSDK.EdsSetPropertyData(this.Handle, propertyId, 0, Marshal.SizeOf(typeof(uint)), (uint)data),
                 string.Format("Failed to set property integer data: propertyId {0}, data {1}", propertyId, data),
                 propertyId, data));
         }
 
         public void SetPropertyIntegerArrayData(uint propertyId, uint[] data)
         {
-            this.ExecuteSetter(() => Util.Assert(Edsdk.EdsSetPropertyData(this.Handle, propertyId, 0, Marshal.SizeOf(typeof(uint)) * data.Length, data),
+            this.ExecuteSetter(() => Util.Assert(EDSDK.EdsSetPropertyData(this.Handle, propertyId, 0, Marshal.SizeOf(typeof(uint)) * data.Length, data),
                 string.Format("Failed to set property integer array data: propertyId {0}, data {1}", propertyId, data),
                 propertyId, data));
         }
@@ -272,7 +272,7 @@ namespace Canon.Eos.Framework
                 if (bytes.Length > maxByteLength)
                     throw new ArgumentException(string.Format("'{0}' converted to bytes is longer than {1}.", data, maxByteLength), "data");
 
-                Util.Assert(Edsdk.EdsSetPropertyData(this.Handle, propertyId, 0, bytes.Length, bytes),
+                Util.Assert(EDSDK.EdsSetPropertyData(this.Handle, propertyId, 0, bytes.Length, bytes),
                     string.Format("Failed to set property string data: propertyId {0}, data {1}", propertyId, data),
                     propertyId, data);
             });

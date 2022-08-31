@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using Canon.Eos.Framework.Helper;
-using Canon.Eos.Framework.Internal.SDK;
+using EDSDKLib;
 
 namespace Canon.Eos.Framework
 {
@@ -10,47 +10,65 @@ namespace Canon.Eos.Framework
         internal static EosLiveImage CreateFromStream(IntPtr stream)
         {
             IntPtr imagePtr;
-            Util.Assert(Edsdk.EdsCreateEvfImageRef(stream, out imagePtr), "Failed to create evf image.");
+            Util.Assert(EDSDK.EdsCreateEvfImageRef(stream, out imagePtr), "Failed to create evf image.");
             return new EosLiveImage(imagePtr);    
         }
 
         internal EosLiveImage(IntPtr imagePtr)
             : base(imagePtr) { }
 
-        [EosProperty(Edsdk.PropID_Evf_ImagePosition)]
+        [EosProperty(EDSDK.PropID_Evf_ImagePosition)]
         public Point ImagePosition
         {
-            get { return this.GetPropertyPointData(Edsdk.PropID_Evf_ImagePosition); }
+            get { return this.GetPropertyPointData(EDSDK.PropID_Evf_ImagePosition); }
         }
 
-        [EosProperty(Edsdk.PropID_Evf_Zoom)]
-        public long[] Histogram
+        [EosProperty(EDSDK.PropID_Evf_HistogramB)]
+        public long[] HistogramB
         {
-            get { return this.GetPropertyIntegerArrayData(Edsdk.PropID_Evf_Histogram); }
+            get { return this.GetPropertyIntegerArrayData(EDSDK.PropID_Evf_HistogramB); }
         }
 
-        [EosProperty(Edsdk.PropID_Evf_Zoom)]
+        [EosProperty(EDSDK.PropID_Evf_HistogramG)]
+        public long[] HistogramG
+        {
+            get { return this.GetPropertyIntegerArrayData(EDSDK.PropID_Evf_HistogramG); }
+        }
+
+        [EosProperty(EDSDK.PropID_Evf_HistogramR)]
+        public long[] HistogramR
+        {
+            get { return this.GetPropertyIntegerArrayData(EDSDK.PropID_Evf_HistogramR); }
+        }
+
+        [EosProperty(EDSDK.PropID_Evf_HistogramY)]
+        public long[] HistogramY
+        {
+            get { return this.GetPropertyIntegerArrayData(EDSDK.PropID_Evf_HistogramY); }
+        }
+
+        [EosProperty(EDSDK.PropID_Evf_Zoom)]
         public long Zoom
         {
-            get { return this.GetPropertyIntegerData(Edsdk.PropID_Evf_Zoom); }
+            get { return this.GetPropertyIntegerData(EDSDK.PropID_Evf_Zoom); }
         }
 
-        [EosProperty(Edsdk.PropID_Evf_ZoomRect)]
+        [EosProperty(EDSDK.PropID_Evf_ZoomRect)]
         public Rectangle ZoomBounds
         {
-            get { return this.GetPropertyRectangleData(Edsdk.PropID_Evf_ZoomRect); }
+            get { return this.GetPropertyRectangleData(EDSDK.PropID_Evf_ZoomRect); }
         }
 
-        [EosProperty(Edsdk.PropID_Evf_ZoomPosition)]
+        [EosProperty(EDSDK.PropID_Evf_ZoomPosition)]
         public Point ZoomPosition
         {
-            get { return this.GetPropertyPointData(Edsdk.PropID_Evf_ZoomPosition); }
+            get { return this.GetPropertyPointData(EDSDK.PropID_Evf_ZoomPosition); }
         }
 
-        [EosProperty(Edsdk.PropID_Evf_CoordinateSystem)]
+        [EosProperty(EDSDK.PropID_Evf_CoordinateSystem)]
         public Size Size
         {
-            get { return this.GetPropertySizeData(Edsdk.PropID_Evf_CoordinateSystem); }
+            get { return this.GetPropertySizeData(EDSDK.PropID_Evf_CoordinateSystem); }
         }
     }
 }
