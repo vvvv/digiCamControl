@@ -1,5 +1,5 @@
 ﻿using System;
-using Canon.Eos.Framework.Internal.SDK;
+using EDSDKLib;
 
 namespace Canon.Eos.Framework
 {
@@ -21,15 +21,15 @@ namespace Canon.Eos.Framework
             EosFramework.LogInstance.Debug("HandleStateEvent fired: " + stateEvent);
             switch (stateEvent)
             {
-                case Edsdk.StateEvent_Shutdown:
+                case EDSDK.StateEvent_Shutdown:
                     this.OnStateEventShutdown(EventArgs.Empty);
                     break;
 
-                case Edsdk.StateEvent_WillSoonShutDown:
+                case EDSDK.StateEvent_WillSoonShutDown:
                     this.OnStateEventWillShutdown(EventArgs.Empty);
                     break;
             }
-            return Edsdk.EDS_ERR_OK;
+            return EDSDK.EDS_ERR_OK;
         }        
     }
 }

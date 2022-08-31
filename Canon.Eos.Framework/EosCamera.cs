@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using Canon.Eos.Framework.Eventing;
 using Canon.Eos.Framework.Helper;
-using Canon.Eos.Framework.Internal.SDK;
+using EDSDKLib;
 
 namespace Canon.Eos.Framework
 {
@@ -21,10 +21,10 @@ namespace Canon.Eos.Framework
         const int MaximumArtistLengthInBytes = 64;
         const int MaximumOwnerNameLengthInBytes = 32;
 
-        private Edsdk.EdsDeviceInfo _deviceInfo;
-        private Edsdk.EdsObjectEventHandler _edsObjectEventHandler;
-        private Edsdk.EdsPropertyEventHandler _edsPropertyEventHandler;
-        private Edsdk.EdsStateEventHandler _edsStateEventHandler;
+        private EDSDK.EdsDeviceInfo _deviceInfo;
+        private EDSDK.EdsObjectEventHandler _edsObjectEventHandler;
+        private EDSDK.EdsPropertyEventHandler _edsPropertyEventHandler;
+        private EDSDK.EdsStateEventHandler _edsStateEventHandler;
 
         public event EventHandler LiveViewStarted;
         public event EventHandler LiveViewStopped;
@@ -41,7 +41,7 @@ namespace Canon.Eos.Framework
         internal EosCamera(IntPtr camera)
             : base(camera)
         {
-            Util.Assert(Edsdk.EdsGetDeviceInfo(this.Handle, out _deviceInfo), 
+            Util.Assert(EDSDK.EdsGetDeviceInfo(this.Handle, out _deviceInfo), 
                 "Failed to get device info.");                  
             //this.SetEventHandlers();
             //this.EnsureOpenSession();
@@ -56,7 +56,7 @@ namespace Canon.Eos.Framework
         public new string Artist
         {
             get { return base.Artist; }
-            set { this.SetPropertyStringData(Edsdk.PropID_Artist, value, 
+            set { this.SetPropertyStringData(EDSDK.PropID_Artist, value, 
                 EosCamera.MaximumArtistLengthInBytes); }
         }
 
@@ -66,11 +66,11 @@ namespace Canon.Eos.Framework
         /// <value>
         /// The battery level.
         /// </value>
-        [EosProperty(Edsdk.PropID_BatteryQuality)]
+        [EosProperty(EDSDK.PropID_BatteryQuality)]
         public long BatteryLevel
         {
-            get { return this.GetPropertyIntegerData(Edsdk.PropID_BatteryLevel); }
-            set { this.SetPropertyIntegerData(Edsdk.PropID_BatteryLevel, value); }
+            get { return this.GetPropertyIntegerData(EDSDK.PropID_BatteryLevel); }
+            set { this.SetPropertyIntegerData(EDSDK.PropID_BatteryLevel, value); }
         }
 
         /// <summary>
@@ -81,8 +81,8 @@ namespace Canon.Eos.Framework
         /// </value>
         public EosBatteryQuality BatteryQuality
         {
-            get { return (EosBatteryQuality)this.GetPropertyIntegerData(Edsdk.PropID_BatteryQuality); }
-            set { this.SetPropertyIntegerData(Edsdk.PropID_BatteryQuality, (long)value); }
+            get { return (EosBatteryQuality)this.GetPropertyIntegerData(EDSDK.PropID_BatteryQuality); }
+            set { this.SetPropertyIntegerData(EDSDK.PropID_BatteryQuality, (long)value); }
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Canon.Eos.Framework
         public new string Copyright
         {
             get { return base.Copyright; }
-            set { this.SetPropertyStringData(Edsdk.PropID_Copyright, value, 
+            set { this.SetPropertyStringData(EDSDK.PropID_Copyright, value, 
                 EosCamera.MaximumCopyrightLengthInBytes); }
         }
 
@@ -104,11 +104,11 @@ namespace Canon.Eos.Framework
         /// <value>
         /// 	<c>true</c> if depth of field preview is enabled; otherwise, <c>false</c>.
         /// </value>
-        [EosProperty(Edsdk.PropID_Evf_DepthOfFieldPreview)]        
+        [EosProperty(EDSDK.PropID_Evf_DepthOfFieldPreview)]        
         public bool DepthOfFieldPreview
         {
-            get { return this.GetPropertyIntegerData(Edsdk.PropID_Evf_DepthOfFieldPreview) != 0; }
-            set { this.SetPropertyIntegerData(Edsdk.PropID_Evf_DepthOfFieldPreview, value ? 1 : 0); }
+            get { return this.GetPropertyIntegerData(EDSDK.PropID_Evf_DepthOfFieldPreview) != 0; }
+            set { this.SetPropertyIntegerData(EDSDK.PropID_Evf_DepthOfFieldPreview, value ? 1 : 0); }
         }
 
         /// <summary>
@@ -125,11 +125,11 @@ namespace Canon.Eos.Framework
         /// <value>
         /// The image quality.
         /// </value>
-        [EosProperty(Edsdk.PropID_ImageQuality)]        
+        [EosProperty(EDSDK.PropID_ImageQuality)]        
         public EosImageQuality ImageQuality
         {
-            get { return EosImageQuality.Create(this.GetPropertyIntegerData(Edsdk.PropID_ImageQuality)); }
-            set { this.SetPropertyIntegerData(Edsdk.PropID_ImageQuality, value.ToBitMask()); }
+            get { return EosImageQuality.Create(this.GetPropertyIntegerData(EDSDK.PropID_ImageQuality)); }
+            set { this.SetPropertyIntegerData(EDSDK.PropID_ImageQuality, value.ToBitMask()); }
         }
 
 
@@ -141,11 +141,11 @@ namespace Canon.Eos.Framework
         /// <value>
         /// 	<c>true</c> if this instance is in live view mode; otherwise, <c>false</c>.
         /// </value>
-        [EosProperty(Edsdk.PropID_Evf_Mode)]        
+        [EosProperty(EDSDK.PropID_Evf_Mode)]        
         public bool IsInLiveViewMode
         {
-            get { return this.GetPropertyIntegerData(Edsdk.PropID_Evf_Mode) != 0; }                    
-            set { this.SetPropertyIntegerData(Edsdk.PropID_Evf_Mode, value ? 1 : 0); }
+            get { return this.GetPropertyIntegerData(EDSDK.PropID_Evf_Mode) != 0; }                    
+            set { this.SetPropertyIntegerData(EDSDK.PropID_Evf_Mode, value ? 1 : 0); }
         }
 
         /// <summary>
@@ -173,11 +173,11 @@ namespace Canon.Eos.Framework
         /// <value>
         /// The live view auto focus.
         /// </value>
-        [EosProperty(Edsdk.PropID_Evf_AFMode)]
+        [EosProperty(EDSDK.PropID_Evf_AFMode)]
         public EosLiveViewAutoFocus LiveViewAutoFocus
         {
-            get { return (EosLiveViewAutoFocus)this.GetPropertyIntegerData(Edsdk.PropID_Evf_AFMode); }
-            set { this.SetPropertyIntegerData(Edsdk.PropID_Evf_AFMode, (long)value); }
+            get { return (EosLiveViewAutoFocus)this.GetPropertyIntegerData(EDSDK.PropID_Evf_AFMode); }
+            set { this.SetPropertyIntegerData(EDSDK.PropID_Evf_AFMode, (long)value); }
         }
 
         /// <summary>
@@ -186,11 +186,11 @@ namespace Canon.Eos.Framework
         /// <value>
         /// The live view color temperature.
         /// </value>
-        [EosProperty(Edsdk.PropID_Evf_ColorTemperature)]
+        [EosProperty(EDSDK.PropID_Evf_ColorTemperature)]
         public long LiveViewColorTemperature
         {
-            get { return this.GetPropertyIntegerData(Edsdk.PropID_Evf_ColorTemperature); }
-            set { this.SetPropertyIntegerData(Edsdk.PropID_Evf_ColorTemperature, value); }
+            get { return this.GetPropertyIntegerData(EDSDK.PropID_Evf_ColorTemperature); }
+            set { this.SetPropertyIntegerData(EDSDK.PropID_Evf_ColorTemperature, value); }
         }
 
         /// <summary>
@@ -199,11 +199,11 @@ namespace Canon.Eos.Framework
         /// <value>
         /// The live view device.
         /// </value>
-        [EosProperty(Edsdk.PropID_Evf_OutputDevice)]
+        [EosProperty(EDSDK.PropID_Evf_OutputDevice)]
         public EosLiveViewDevice LiveViewDevice
         {
-            get { return (EosLiveViewDevice)this.GetPropertyIntegerData(Edsdk.PropID_Evf_OutputDevice); }
-            set { this.SetPropertyIntegerData(Edsdk.PropID_Evf_OutputDevice, (long)value); }
+            get { return (EosLiveViewDevice)this.GetPropertyIntegerData(EDSDK.PropID_Evf_OutputDevice); }
+            set { this.SetPropertyIntegerData(EDSDK.PropID_Evf_OutputDevice, (long)value); }
         }
 
         /// <summary>
@@ -212,11 +212,11 @@ namespace Canon.Eos.Framework
         /// <value>
         /// The live view white balance.
         /// </value>
-        [EosProperty(Edsdk.PropID_Evf_WhiteBalance)]
+        [EosProperty(EDSDK.PropID_Evf_WhiteBalance)]
         public EosWhiteBalance LiveViewWhiteBalance
         {
-            get { return (EosWhiteBalance)this.GetPropertyIntegerData(Edsdk.PropID_Evf_WhiteBalance); }
-            set { this.SetPropertyIntegerData(Edsdk.PropID_Evf_WhiteBalance, (long)value); }
+            get { return (EosWhiteBalance)this.GetPropertyIntegerData(EDSDK.PropID_Evf_WhiteBalance); }
+            set { this.SetPropertyIntegerData(EDSDK.PropID_Evf_WhiteBalance, (long)value); }
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace Canon.Eos.Framework
         public new string OwnerName
         {
             get { return base.OwnerName; }
-            set { this.SetPropertyStringData(Edsdk.PropID_OwnerName, value, 
+            set { this.SetPropertyStringData(EDSDK.PropID_OwnerName, value, 
                 EosCamera.MaximumOwnerNameLengthInBytes); }
         }
 
@@ -271,15 +271,15 @@ namespace Canon.Eos.Framework
 
             this.EnsureOpenSession();
 
-            Util.Assert(Edsdk.EdsSetPropertyData(this.Handle, Edsdk.PropID_SaveTo, 0, Marshal.SizeOf(typeof(int)), 
+            Util.Assert(EDSDK.EdsSetPropertyData(this.Handle, EDSDK.PropID_SaveTo, 0, Marshal.SizeOf(typeof(int)), 
                 (int)saveLocation), "Failed to set SaveTo location.");
             
             if(!this.IsLegacy)
             {
                 this.LockAndExceute(() =>
                 {
-                    var capacity = new Edsdk.EdsCapacity { NumberOfFreeClusters = 0x7FFFFFFF, BytesPerSector = 0x1000, Reset = 1 };
-                    Util.Assert(Edsdk.EdsSetCapacity(this.Handle, capacity), "Failed to set capacity.");
+                    var capacity = new EDSDK.EdsCapacity { NumberOfFreeClusters = 0x7FFFFFFF, BytesPerSector = 0x1000, Reset = 1 };
+                    Util.Assert(EDSDK.EdsSetCapacity(this.Handle, capacity), "Failed to set capacity.");
                 });                
             }            
         }
@@ -287,7 +287,7 @@ namespace Canon.Eos.Framework
         protected internal override void DisposeUnmanaged()
         {            
             if (this.IsSessionOpen)
-                Edsdk.EdsCloseSession(this.Handle);
+                EDSDK.EdsCloseSession(this.Handle);
             base.DisposeUnmanaged();
         }
 
@@ -296,7 +296,7 @@ namespace Canon.Eos.Framework
             this.CheckDisposed();
             if (!this.IsSessionOpen)
             {
-                Util.Assert(Edsdk.EdsOpenSession(this.Handle), "Failed to open session.");
+                Util.Assert(EDSDK.EdsOpenSession(this.Handle), "Failed to open session.");
                 this.IsSessionOpen = true;
             }
         }
@@ -346,7 +346,7 @@ namespace Canon.Eos.Framework
 
                 if (!this.IsLocked)
                 {
-                    Util.Assert(Edsdk.EdsSendStatusCommand(this.Handle, Edsdk.CameraState_UILock,0),
+                    Util.Assert(EDSDK.EdsSendStatusCommand(this.Handle, EDSDK.CameraState_UILock,0),
                                 "Failed to lock camera.");
                     this.IsLocked = true;
                 }
@@ -355,7 +355,7 @@ namespace Canon.Eos.Framework
 
         public void DeleteItem(IntPtr itemInfo)
         {
-            LockAndExceute(() => { Edsdk.EdsDeleteDirectoryItem(itemInfo); });
+            LockAndExceute(() => { EDSDK.EdsDeleteDirectoryItem(itemInfo); });
         }
 
         private void LockAndExceute(Action action)
@@ -389,7 +389,7 @@ namespace Canon.Eos.Framework
         {
             lock (_locker)
             {
-                SendCommand(Edsdk.CameraCommand_DoEvfAf, 0);
+                SendCommand(EDSDK.CameraCommand_DoEvfAf, 0);
                 bool retry = false;
                 int retrynum = 0;
                 //DeviceReady();
@@ -426,7 +426,7 @@ namespace Canon.Eos.Framework
             lock (_locker)
             {
                 //return (long)this.GetPropertyIntegerData(propertyId);
-                var v = this.GetPropertyStruct<Edsdk.EdsTime>(Edsdk.PropID_DateTime, Edsdk.EdsDataType.Time);
+                var v = this.GetPropertyStruct<EDSDK.EdsTime>(EDSDK.PropID_DateTime, EDSDK.EdsDataType.Time);
                 return new DateTime(v.Year, v.Month, v.Day, v.Hour, v.Minute, v.Second);
             }
         }
@@ -437,13 +437,13 @@ namespace Canon.Eos.Framework
             lock (_locker)
             {
                 //return (long)this.GetPropertyIntegerData(propertyId);
-//                var v = this.GetPropertyStruct<Edsdk.EdsTime>(Edsdk.PropID_DateTime, Edsdk.EdsDataType.Time);
-                Edsdk.EdsTime edsTime = new Edsdk.EdsTime()
+                //                var v = this.GetPropertyStruct<EDSDK.EdsTime>(EDSDK.PropID_DateTime, EDSDK.EdsDataType.Time);
+                EDSDK.EdsTime edsTime = new EDSDK.EdsTime()
                 {
                     Day = time.Day, Hour = time.Hour, Year = time.Year, Minute = time.Minute, Month = time.Month,
                     Second = time.Second
                 };
-                this.SetPropertyStruct<Edsdk.EdsTime>(Edsdk.PropID_DateTime, edsTime);
+                this.SetPropertyStruct<EDSDK.EdsTime>(EDSDK.PropID_DateTime, edsTime);
             }
         }
 
@@ -491,22 +491,22 @@ namespace Canon.Eos.Framework
             lock (_locker)
             {
                 this.EnsureOpenSession();
-                return Edsdk.EdsSendCommand(this.Handle, command, parameter);
+                return EDSDK.EdsSendCommand(this.Handle, command, parameter);
             }
         }
 
         public void SetEventHandlers()
         {   
             _edsStateEventHandler = this.HandleStateEvent;
-            Util.Assert(Edsdk.EdsSetCameraStateEventHandler(this.Handle, Edsdk.StateEvent_All, 
+            Util.Assert(EDSDK.EdsSetCameraStateEventHandler(this.Handle, EDSDK.StateEvent_All, 
                 _edsStateEventHandler, IntPtr.Zero), "Failed to set state handler.");                     
 
             _edsObjectEventHandler = this.HandleObjectEvent;            
-            Util.Assert(Edsdk.EdsSetObjectEventHandler(this.Handle, Edsdk.ObjectEvent_All, 
+            Util.Assert(EDSDK.EdsSetObjectEventHandler(this.Handle, EDSDK.ObjectEvent_All, 
                 _edsObjectEventHandler, IntPtr.Zero), "Failed to set object handler.");
 
             _edsPropertyEventHandler = this.HandlePropertyEvent;
-            Util.Assert(Edsdk.EdsSetPropertyEventHandler(this.Handle, Edsdk.PropertyEvent_All, 
+            Util.Assert(EDSDK.EdsSetPropertyEventHandler(this.Handle, EDSDK.PropertyEvent_All, 
                 _edsPropertyEventHandler, IntPtr.Zero), "Failed to set object handler.");            
         }
 
@@ -565,10 +565,10 @@ namespace Canon.Eos.Framework
             {
                 StopLiveView();
                 SavePicturesToCamera();
-                this.SendCommand(Edsdk.CameraCommand_MovieSelectSwON);
+                this.SendCommand(EDSDK.CameraCommand_MovieSelectSwON);
                 StartLiveView();
-                this.SendCommand(Edsdk.CameraCommand_DoEvfAf, 0);
-                SetPropertyIntegerData(Edsdk.PropID_Record, (long)4);
+                this.SendCommand(EDSDK.CameraCommand_DoEvfAf, 0);
+                SetPropertyIntegerData(EDSDK.PropID_Record, (long)4);
             });
         }
 
@@ -576,9 +576,9 @@ namespace Canon.Eos.Framework
         {
             //LiveViewqueue.Enqueue(() =>
             //{
-                this.SendCommand(Edsdk.CameraCommand_DoEvfAf, 0);
-                SetPropertyIntegerData(Edsdk.PropID_Record, (long)0);
-                this.SendCommand(Edsdk.CameraCommand_MovieSelectSwOFF);
+                this.SendCommand(EDSDK.CameraCommand_DoEvfAf, 0);
+                SetPropertyIntegerData(EDSDK.PropID_Record, (long)0);
+                this.SendCommand(EDSDK.CameraCommand_MovieSelectSwOFF);
             //});
         }
 
@@ -604,7 +604,7 @@ namespace Canon.Eos.Framework
             {
                 if (IsOldCanon())
                 {
-                    Util.Assert(this.SendCommand(Edsdk.CameraCommand_TakePicture), "Failed to capture picture with CameraCommand_TakePicture.");
+                    Util.Assert(this.SendCommand(EDSDK.CameraCommand_TakePicture), "Failed to capture picture with CameraCommand_TakePicture.");
                     return;
                 }
 
@@ -613,9 +613,9 @@ namespace Canon.Eos.Framework
                     this.LockAndExceute(this.TakePicture);
                     return;
                 }
-                Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, (int)Edsdk.EdsShutterButton.CameraCommand_ShutterButton_Completely),
+                Util.Assert(this.SendCommand(EDSDK.CameraCommand_PressShutterButton, (int)EDSDK.EdsShutterButton.CameraCommand_ShutterButton_Completely),
                     "Failed to press fully.");
-                Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, (int)Edsdk.EdsShutterButton.CameraCommand_ShutterButton_OFF),
+                Util.Assert(this.SendCommand(EDSDK.CameraCommand_PressShutterButton, (int)EDSDK.EdsShutterButton.CameraCommand_ShutterButton_OFF),
                     "Failed to release.");
             }
         }
@@ -625,7 +625,7 @@ namespace Canon.Eos.Framework
             //_photoCounter = ImageQuality.SecondaryCompressLevel != EosCompressLevel.Unknown ? 0 : 1;
             if (IsOldCanon())
             {
-                Util.Assert(this.SendCommand(Edsdk.CameraCommand_TakePicture), "Failed to capture picture with CameraCommand_TakePicture.");
+                Util.Assert(this.SendCommand(EDSDK.CameraCommand_TakePicture), "Failed to capture picture with CameraCommand_TakePicture.");
                 return;
             }
 
@@ -635,9 +635,9 @@ namespace Canon.Eos.Framework
                 return;
             }
 
-            Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, (int) Edsdk.EdsShutterButton.CameraCommand_ShutterButton_Completely_NonAF),
+            Util.Assert(this.SendCommand(EDSDK.CameraCommand_PressShutterButton, (int)EDSDK.EdsShutterButton.CameraCommand_ShutterButton_Completely_NonAF),
                 "Failed to take picture no AF.");
-            Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, (int)Edsdk.EdsShutterButton.CameraCommand_ShutterButton_OFF),
+            Util.Assert(this.SendCommand(EDSDK.CameraCommand_PressShutterButton, (int)EDSDK.EdsShutterButton.CameraCommand_ShutterButton_OFF),
                 "Failed to release.");
         }
 
@@ -649,7 +649,7 @@ namespace Canon.Eos.Framework
                 return;
             }
 
-            Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, (int)Edsdk.EdsShutterButton.CameraCommand_ShutterButton_OFF),
+            Util.Assert(this.SendCommand(EDSDK.CameraCommand_PressShutterButton, (int)EDSDK.EdsShutterButton.CameraCommand_ShutterButton_OFF),
                 "Failed to take picture no AF.");
         }
 
@@ -664,12 +664,12 @@ namespace Canon.Eos.Framework
                 }
 
                 Util.Assert(
-                    this.SendCommand(Edsdk.CameraCommand_PressShutterButton,
-                                     (int) Edsdk.EdsShutterButton.CameraCommand_ShutterButton_OFF),
+                    this.SendCommand(EDSDK.CameraCommand_PressShutterButton,
+                                     (int)EDSDK.EdsShutterButton.CameraCommand_ShutterButton_OFF),
                     "Failed to take picture no AF.");
                 Util.Assert(
-                    this.SendCommand(Edsdk.CameraCommand_PressShutterButton,
-                                     (int) Edsdk.EdsShutterButton.CameraCommand_ShutterButton_Halfway),
+                    this.SendCommand(EDSDK.CameraCommand_PressShutterButton,
+                                     (int)EDSDK.EdsShutterButton.CameraCommand_ShutterButton_Halfway),
                     "Failed to take picture no AF.");
             }
         }
@@ -679,7 +679,7 @@ namespace Canon.Eos.Framework
         {
             //this.Lock();
             //Thread.Sleep(120);
-            Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, 65539),
+            Util.Assert(this.SendCommand(EDSDK.CameraCommand_PressShutterButton, 65539),
                 "Failed to start bulb mode");
         }
 
@@ -687,7 +687,7 @@ namespace Canon.Eos.Framework
         {
             try
             {
-                Util.Assert(this.SendCommand(Edsdk.CameraCommand_PressShutterButton, 0),
+                Util.Assert(this.SendCommand(EDSDK.CameraCommand_PressShutterButton, 0),
                     "Failed to start bulb mode");
             }
             finally
@@ -705,7 +705,7 @@ namespace Canon.Eos.Framework
                 return;
             }
 
-            Util.Assert(this.SendCommand(Edsdk.CameraCommand_DriveLensEvf, (int) focus),
+            Util.Assert(this.SendCommand(EDSDK.CameraCommand_DriveLensEvf, (int) focus),
                 "Failed to focus");
         }
 
@@ -717,7 +717,7 @@ namespace Canon.Eos.Framework
                 return;
             }
 
-            Util.Assert(this.SendCommand(Edsdk.CameraCommand_DoEvfAf, (int)focus),
+            Util.Assert(this.SendCommand(EDSDK.CameraCommand_DoEvfAf, (int)focus),
                 "Failed to focus");
         }
 
@@ -756,7 +756,7 @@ namespace Canon.Eos.Framework
             {
                 if (this.IsLocked)
                 {
-                    Edsdk.EdsSendStatusCommand(this.Handle, Edsdk.CameraState_UIUnLock,0);
+                    EDSDK.EdsSendStatusCommand(this.Handle, EDSDK.CameraState_UIUnLock,0);
                     this.IsLocked = false;
                 }
             }

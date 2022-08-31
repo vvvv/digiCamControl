@@ -1,13 +1,11 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Canon.Eos.Framework.Internal.SDK
+namespace EDSDKLib
 {
 
-    public partial class Edsdk
+    public class EDSDK
     {
-
-
         #region Callback Functions
 
         public delegate uint EdsProgressCallback( uint inPercent, IntPtr inContext, ref bool outCancel);
@@ -75,51 +73,24 @@ namespace Canon.Eos.Framework.Internal.SDK
         public const uint   PropID_SaveTo               = 0x0000000b;
         public const uint   kEdsPropID_CurrentStorage   = 0x0000000c;
         public const uint   kEdsPropID_CurrentFolder    = 0x0000000d;
-        public const uint   kEdsPropID_MyMenu           = 0x0000000e;
 
 		public const uint	PropID_BatteryQuality       = 0x00000010;
-        public const uint   PropID_UTCTime              = 16777238;
-
-        public const uint	PropID_HDDirectoryStructure   = 0x00000020;
 
         /*----------------------------------
          Image Properties
         ----------------------------------*/
-        public const uint   PropID_ImageQuality         = 0x00000100;   
-        public const uint   PropID_JpegQuality          = 0x00000101;    
+        public const uint   PropID_ImageQuality         = 0x00000100;    
         public const uint   PropID_Orientation          = 0x00000102;   
         public const uint   PropID_ICCProfile           = 0x00000103;   
         public const uint   PropID_FocusInfo            = 0x00000104;   
-        public const uint   PropID_DigitalExposure      = 0x00000105;   
         public const uint   PropID_WhiteBalance         = 0x00000106;   
         public const uint   PropID_ColorTemperature     = 0x00000107;   
         public const uint   PropID_WhiteBalanceShift    = 0x00000108;
-        public const uint   PropID_Contrast             = 0x00000109;
-        public const uint   PropID_ColorSaturation      = 0x0000010a;
-        public const uint   PropID_ColorTone            = 0x0000010b;
-        public const uint   PropID_Sharpness            = 0x0000010c;
         public const uint   PropID_ColorSpace           = 0x0000010d;
-        public const uint   PropID_ToneCurve            = 0x0000010e;
-        public const uint   PropID_PhotoEffect          = 0x0000010f;
-        public const uint   PropID_FilterEffect         = 0x00000110;
-        public const uint   PropID_ToningEffect         = 0x00000111;
-        public const uint   PropID_ParameterSet         = 0x00000112;   
-        public const uint   PropID_ColorMatrix          = 0x00000113;
         public const uint   PropID_PictureStyle         = 0x00000114;
         public const uint   PropID_PictureStyleDesc     = 0x00000115;
         public const uint   PropID_PictureStyleCaption  = 0x00000200;
 
-        /*----------------------------------
-         Image Processing Properties
-        ----------------------------------*/
-        public const uint   PropID_Linear               = 0x00000300;
-        public const uint   PropID_ClickWBPoint         = 0x00000301;
-        public const uint   PropID_WBCoeffs             = 0x00000302;
-
-        /*----------------------------------
-         Property Mask
-        ----------------------------------*/
-        public const uint   PropID_AtCapture_Flag       = 0x80000000;   
 
         /*----------------------------------
          Capture Properties
@@ -133,14 +104,12 @@ namespace Canon.Eos.Framework.Internal.SDK
         public const uint   PropID_Av                   = 0x00000405;
         public const uint   PropID_Tv                   = 0x00000406;
         public const uint   PropID_ExposureCompensation = 0x00000407;
-        public const uint   PropID_FlashCompensation    = 0x00000408;
         public const uint   PropID_FocalLength          = 0x00000409;
         public const uint   PropID_AvailableShots       = 0x0000040a;
         public const uint   PropID_Bracket              = 0x0000040b;
         public const uint   PropID_WhiteBalanceBracket  = 0x0000040c;
         public const uint   PropID_LensName             = 0x0000040d;
         public const uint   PropID_AEBracket            = 0x0000040e;
-        public const uint   PropID_AEBracketType        = 16778300;
         public const uint   PropID_FEBracket            = 0x0000040f;
         public const uint   PropID_ISOBracket           = 0x00000410;
         public const uint   PropID_NoiseReduction       = 0x00000411;
@@ -151,8 +120,6 @@ namespace Canon.Eos.Framework.Internal.SDK
         
         public const uint   PropID_Artist	            = 0x00000418;
         public const uint   PropID_Copyright	        = 0x00000419;
-        public const uint   PropID_DepthOfField	        = 0x0000041b;
-        public const uint   PropID_EFCompensation       = 0x0000041e;
 
 		/*----------------------------------
 		 EVF Properties
@@ -166,15 +133,19 @@ namespace Canon.Eos.Framework.Internal.SDK
 		// EVF IMAGE DATA Properties
         public const uint   PropID_Evf_Zoom                = 0x00000507;
         public const uint   PropID_Evf_ZoomPosition        = 0x00000508;
-        public const uint   PropID_Evf_FocusAid            = 0x00000509;
-        public const uint   PropID_Evf_Histogram           = 0x0000050A;
         public const uint   PropID_Evf_ImagePosition       = 0x0000050B;
-        public const uint PropID_Evf_ZoomRect = 0x00000541;
 		public const uint   PropID_Evf_HistogramStatus     = 0x0000050C;
         public const uint   PropID_Evf_AFMode              = 0x0000050E;
-        public const uint PropID_Evf_CoordinateSystem = 0x00000540;
+        public const uint   PropID_Evf_HistogramY          = 0x00000515;
+        public const uint   PropID_Evf_HistogramR          = 0x00000516;
+        public const uint   PropID_Evf_HistogramG          = 0x00000517;
+        public const uint   PropID_Evf_HistogramB          = 0x00000518;
+        
+        public const uint   PropID_Evf_CoordinateSystem    = 0x00000540;
+        public const uint   PropID_Evf_ZoomRect            = 0x00000541;
+
 		public const uint   PropID_Record                  = 0x00000510;
-             
+
         /*----------------------------------
          Image GPS Properties
         ----------------------------------*/
@@ -189,26 +160,67 @@ namespace Canon.Eos.Framework.Internal.SDK
         public const uint   PropID_GPSSatellites		 =  0x00000808; 		
         public const uint   PropID_GPSStatus			 =  0x00000809;
         public const uint   PropID_GPSMapDatum			 =  0x00000812; 		
-		public const uint   PropID_GPSDateStamp			 =  0x0000081D; 		
-		#endregion
+		public const uint   PropID_GPSDateStamp			 =  0x0000081D; 	
+	
+        /*----------------------------------
+        DC Properties
+        ----------------------------------*/
+		public const uint   PropID_DC_Zoom               = 0x00000600;
+		public const uint   PropID_DC_Strobe             = 0x00000601;
+		public const uint   PropID_LensBarrelStatus      = 0x00000605;
+
+
+        public const uint   PropID_TempStatus            = 0x01000415;
+        public const uint   PropID_Evf_RollingPitching   = 0x01000544;
+        public const uint   PropID_FixedMovie            = 0x01000422;
+        public const uint   PropID_MovieParam            = 0x01000423;
+        public const uint   PropID_Aspect                = 0x01000431;
+
+        public const uint   PropID_Evf_ClickWBCoeffs     = 0x01000506;
+        public const uint   PropID_Evf_VisibleRect       = 0x01000546;
+        public const uint   PropID_ManualWhiteBalanceData = 0x01000204;
+
+        public const uint   PropID_MirrorUpSetting       = 0x01000438;
+        public const uint   PropID_MirrorLockUpState     = 0x01000421;
+
+        public const uint   PropID_UTCTime               = 0x01000016;
+        public const uint   PropID_TimeZone              = 0x01000017;
+        public const uint   PropID_SummerTimeSetting     = 0x01000018;
+
+        public const uint   PropID_AutoPowerOffSetting   = 0x0100045e;
+
+        public const uint   PropID_StillMovieDivideSetting = 0x01000470;
+        public const uint   PropID_CardExtension           = 0x01000471; 
+        public const uint   PropID_MovieCardExtension      = 0x01000472;
+        public const uint   PropID_StillCurrentMedia       = 0x01000473;
+        public const uint   PropID_MovieCurrentMedia       = 0x01000474;
+        public const uint   PropID_MovieHFRSetting         = 0x0100045d;
+        public const uint   PropID_FocusShiftSetting       = 0x01000457;
+
+
+        #endregion
 
         #region Camera commands
 
         /*-----------------------------------------------------------------------------
          Send Commands
         -----------------------------------------------------------------------------*/
-        public const uint CameraCommand_TakePicture         = 0x00000000;       
-        public const uint CameraCommand_ExtendShutDownTimer = 0x00000001;
-        public const uint CameraCommand_BulbStart			= 0x00000002; 
-        public const uint CameraCommand_BulbEnd				= 0x00000003; 
-        public const uint CameraCommand_DoEvfAf             = 0x00000102;
-        public const uint CameraCommand_DriveLensEvf        = 0x00000103;
-        public const uint CameraCommand_DoClickWBEvf        = 0x00000104;
+        public const uint CameraCommand_TakePicture             = 0x00000000;       
+        public const uint CameraCommand_ExtendShutDownTimer     = 0x00000001;
+        public const uint CameraCommand_BulbStart			    = 0x00000002; 
+        public const uint CameraCommand_BulbEnd				    = 0x00000003; 
+        public const uint CameraCommand_DoEvfAf                 = 0x00000102;
+        public const uint CameraCommand_DriveLensEvf            = 0x00000103;
+        public const uint CameraCommand_DoClickWBEvf            = 0x00000104;
+        public const uint CameraCommand_MovieSelectSwON         = 0x00000107;
+        public const uint CameraCommand_MovieSelectSwOFF        = 0x00000108; 
 
-        public const uint CameraCommand_PressShutterButton  = 0x00000004;
-        public const uint CameraCommand_MovieSelectSwON     = 0x00000107;
-        public const uint CameraCommand_MovieSelectSwOFF    = 0x00000108;
-        
+        public const uint CameraCommand_PressShutterButton      = 0x00000004;
+        public const uint CameraCommand_SetRemoteShootingMode   = 0x0000010f;
+        public const uint CameraCommand_RequestRollPitchLevel   = 0x00000109;
+        public const uint CameraCommand_RequestSensorCleaning   = 0x00000112;
+        public const uint CameraCommand_SetModeDialDisable      = 0x00000113;
+
         public enum EdsEvfAf : uint
         {
 	        CameraCommand_EvfAf_OFF		= 0,
@@ -339,6 +351,9 @@ namespace Canon.Eos.Framework.Internal.SDK
             Non = 0,
             CF  = 1,
             SD  = 2,
+            HD  = 4,
+            CFast = 5,
+            CFe = 7,
         } 
 
         /*-----------------------------------------------------------------------------
@@ -351,7 +366,26 @@ namespace Canon.Eos.Framework.Internal.SDK
             ToDesktop           = 0x00000100,
         }
 
-		/*-----------------------------------------------------------------------------
+        /*-----------------------------------------------------------------------------
+         Mirror Lockup State
+        -----------------------------------------------------------------------------*/
+        public enum EdsMirrorLockupState : uint
+        {
+            Disable = 0,
+            Enable = 1,
+            DuringShooting = 2,
+        }
+
+        /*-----------------------------------------------------------------------------
+         Mirror Up Setting
+        -----------------------------------------------------------------------------*/
+        public enum EdsMirrorUpSetting : uint
+        {
+            Off = 0,
+            On = 1,
+        }
+
+        /*-----------------------------------------------------------------------------
 		 Drive Lens
 		-----------------------------------------------------------------------------*/
         public const uint EvfDriveLens_Near1	= 0x00000001;
@@ -367,34 +401,43 @@ namespace Canon.Eos.Framework.Internal.SDK
         public const uint EvfDepthOfFieldPreview_OFF	= 0x00000000;
 		public const uint EvfDepthOfFieldPreview_ON		= 0x00000001;
 
+		/*-----------------------------------------------------------------------------
+		 Image Format 
+		-----------------------------------------------------------------------------*/
+		// Format -------------------------------
+		public const int ImageFormat_Unknown    = 0x00000000;
+		public const int ImageFormat_Jpeg       = 0x00000001;
+		public const int ImageFormat_CRW        = 0x00000002;
+		public const int ImageFormat_RAW        = 0x00000004;
 
-        /*-----------------------------------------------------------------------------
-         Image Format 
-        -----------------------------------------------------------------------------*/
+		public const int ImageFormat_CR2        = 0x00000006;
+		public const int ImageFormat_CR2_Jpeg   = 0x00000007;
+		public const int ImageFormat_HEIF       = 0x00000008;
 
-        public const int ImageFormat_Unknown = 0x00000000;
-        public const int ImageFormat_Jpeg = 0x00000001;
-        public const int ImageFormat_CRW = 0x00000002;
-        public const int ImageFormat_RAW = 0x00000004;
+		// Size ---------------------------------
+		public const int ImageSize_Large        = 0;
+		public const int ImageSize_Middle       = 1;
+		public const int ImageSize_Small        = 2;
+		public const int ImageSize_Middle1      = 5;
+		public const int ImageSize_Middle2      = 6;
+		public const int ImageSize_Small1       = 14;
+		public const int ImageSize_Small2       = 15;
+		public const int ImageSize_Small3       = 16;
+		public const int ImageSize_Unknown      = -1;
 
-        public const int ImageFormat_CR2 = 0x00000006;
+		// Quality ------------------------------
+		public const int ImageQuality_Normal    = 2;
+		public const int ImageQuality_Fine      = 3;
+		public const int ImageQuality_Lossless  = 4;
+		public const int ImageQuality_SuperFine = 5;
+		public const int ImageQuality_Unknown   = -1;
 
-
-        public const int ImageSize_Large = 0;
-        public const int ImageSize_Middle = 1;
-        public const int ImageSize_Small = 2;
-        public const int ImageSize_Middle1 = 5;
-        public const int ImageSize_Middle2 = 6;
-        public const int ImageSize_Unknown = -1;
-
-
-
+		// CompressQuality ----------------------
         public const int CompressQuality_Normal = 2;
 		public const int CompressQuality_Fine = 3;
 		public const int CompressQuality_Lossless = 4;
 		public const int CompressQuality_SuperFine = 5;
 		public const int CompressQuality_Unknown = -1;
-
 
         /*-----------------------------------------------------------------------------
          Battery level
@@ -412,52 +455,23 @@ namespace Canon.Eos.Framework.Internal.SDK
         public const int WhiteBalance_Auto          = 0;
         public const int WhiteBalance_Daylight      = 1;
         public const int WhiteBalance_Cloudy        = 2;
-        public const int WhiteBalance_Tangsten      = 3;
+        public const int WhiteBalance_Tungsten      = 3;
         public const int WhiteBalance_Fluorescent   = 4;
         public const int WhiteBalance_Strobe        = 5;
-        public const int WhiteBalance_WhitePaper    = 6;
         public const int WhiteBalance_Shade         = 8;
         public const int WhiteBalance_ColorTemp     = 9;
+        public const int WhiteBalance_Manual1       = 6;
+        public const int WhiteBalance_Manual2       = 15;
+        public const int WhiteBalance_Manual3       = 16;
+        public const int WhiteBalance_Manual4       = 18;
+        public const int WhiteBalance_Manual5       = 19;
         public const int WhiteBalance_PCSet1        = 10;
         public const int WhiteBalance_PCSet2        = 11;
-        public const int WhiteBalance_PCSet3        = 12;   
-
-        /*-----------------------------------------------------------------------------
-         Photo Effects
-        -----------------------------------------------------------------------------*/
-        public const int PhotoEffect_Off         = 0;
-        public const int PhotoEffect_Monochrome  = 5;
-
-        /*-----------------------------------------------------------------------------
-         Color Matrix
-        -----------------------------------------------------------------------------*/
-        public const int ColorMatrix_Custom      = 0;
-        public const int ColorMatrix_1           = 1;
-        public const int ColorMatrix_2           = 2;
-        public const int ColorMatrix_3           = 3;
-        public const int ColorMatrix_4           = 4;
-        public const int ColorMatrix_5           = 5;
-        public const int ColorMatrix_6           = 6;
-        public const int ColorMatrix_7           = 7;
-
-        /*-----------------------------------------------------------------------------
-         Filter Effects
-        -----------------------------------------------------------------------------*/
-        public const int FilterEffect_None       = 0;
-        public const int FilterEffect_Yellow     = 1;
-        public const int FilterEffect_Orange     = 2;
-        public const int FilterEffect_Red        = 3;
-        public const int FilterEffect_Green      = 4;
-
-        /*-----------------------------------------------------------------------------
-         Toning Effects
-        -----------------------------------------------------------------------------*/
-        public const int TonigEffect_None       = 0;
-        public const int TonigEffect_Sepia      = 1;
-        public const int TonigEffect_Blue       = 2;
-        public const int TonigEffect_Purple     = 3;
-        public const int TonigEffect_Green      = 4;
-
+        public const int WhiteBalance_PCSet3        = 12;
+        public const int WhiteBalance_PCSet4        = 20;
+        public const int WhiteBalance_PCSet5        = 21;
+        public const int WhiteBalance_AwbWhite      = 23; 
+        
         /*-----------------------------------------------------------------------------
          Color Space
         -----------------------------------------------------------------------------*/
@@ -487,27 +501,65 @@ namespace Canon.Eos.Framework.Internal.SDK
         /*-----------------------------------------------------------------------------
          AE Mode
         -----------------------------------------------------------------------------*/
-        public const uint   AEMode_Program          = 0;
-        public const uint   AEMode_Tv               = 1;
-        public const uint   AEMode_Av               = 2;
-        public const uint   AEMode_Mamual           = 3;
-        public const uint   AEMode_Bulb             = 4;
-        public const uint   AEMode_A_DEP            = 5;
-        public const uint   AEMode_DEP              = 6;
-        public const uint   AEMode_Custom           = 7;
-        public const uint   AEMode_Lock             = 8;
-        public const uint   AEMode_Green            = 9;
-        public const uint   AEMode_NigntPortrait    = 10;
-        public const uint   AEMode_Sports           = 11;
-        public const uint   AEMode_Portrait         = 12;
-        public const uint   AEMode_Landscape        = 13;
-        public const uint   AEMode_Closeup          = 14;
-        public const uint   AEMode_FlashOff         = 15;
-        public const uint   AEMode_CreativeAuto     = 19;
-        public const uint   AEMode_Movie			= 20;
-        public const uint   AEMode_PhotoInMovie		= 21;
-		public const uint   AEMode_SceneIntelligentAuto = 22;
-		public const uint   AEMode_SCN              = 25;
+        public const uint   AEMode_Program          = 0x00;
+        public const uint   AEMode_Tv               = 0x01;
+        public const uint   AEMode_Av               = 0x02;
+        public const uint   AEMode_Mamual           = 0x03;
+        public const uint   AEMode_Bulb             = 0x04;
+        public const uint   AEMode_A_DEP            = 0x05;
+        public const uint   AEMode_DEP              = 0x06;
+        public const uint   AEMode_Custom           = 0x07;
+        public const uint   AEMode_Lock             = 0x08;
+        public const uint   AEMode_Green            = 0x09;
+        public const uint   AEMode_NigntPortrait    = 0x0A;
+        public const uint   AEMode_Sports           = 0x0B;
+        public const uint   AEMode_Portrait         = 0x0C;
+        public const uint   AEMode_Landscape        = 0x0D;
+        public const uint   AEMode_Closeup          = 0x0E;
+        public const uint   AEMode_FlashOff         = 0x0F;
+        public const uint   AEMode_CreativeAuto     = 0x13;
+        public const uint   AEMode_Movie			= 0x14;
+        public const uint   AEMode_PhotoInMovie		= 0x15;
+		public const uint   AEMode_SceneIntelligentAuto = 0x16;
+		public const uint   AEMode_SCN              = 0x19;
+		public const uint   AEMode_HandheldNightScenes  = 0x17;
+		public const uint   AEMode_Hdr_BacklightControl = 0x18;
+		public const uint   AEMode_Children         = 0x1A;
+		public const uint   AEMode_Food             = 0x1B;
+		public const uint   AEMode_CandlelightPortraits = 0x1C;
+		public const uint   AEMode_CreativeFilter   = 0x1D;
+		public const uint   AEMode_RoughMonoChrome  = 0x1E;
+		public const uint   AEMode_SoftFocus        = 0x1F;
+		public const uint   AEMode_ToyCamera        = 0x20;
+		public const uint   AEMode_Fisheye          = 0x21;
+		public const uint   AEMode_WaterColor       = 0x22;
+		public const uint   AEMode_Miniature        = 0x23;
+		public const uint   AEMode_Hdr_Standard     = 0x24;
+		public const uint   AEMode_Hdr_Vivid        = 0x25;
+		public const uint   AEMode_Hdr_Bold         = 0x26;
+		public const uint   AEMode_Hdr_Embossed     = 0x27;
+		public const uint   AEMode_Movie_Fantasy    = 0x28;
+		public const uint   AEMode_Movie_Old        = 0x29;
+		public const uint   AEMode_Movie_Memory     = 0x2A;
+		public const uint   AEMode_Movie_DirectMono = 0x2B;
+		public const uint   AEMode_Movie_Mini       = 0x2C;
+		public const uint   AEMode_Panning          = 0x2D;
+		public const uint   AEMode_GroupPhoto       = 0x2E;
+
+        public const uint   AEMode_SelfPortrait     = 0x32;
+        public const uint   AEMode_PlusMovieAuto    = 0x33;
+        public const uint   AEMode_SmoothSkin       = 0x34;
+        public const uint   AEMode_Panorama         = 0x35;
+        public const uint   AEMode_Silent           = 0x36;
+        public const uint   AEMode_Flexible         = 0x37;
+        public const uint   AEMode_OilPainting      = 0x38;
+        public const uint   AEMode_Fireworks        = 0x39;
+        public const uint   AEMode_StarPortrait     = 0x3A;
+        public const uint   AEMode_StarNightscape   = 0x3B;
+        public const uint   AEMode_StarTrails       = 0x3C;
+        public const uint   AEMode_StarTimelapseMovie = 0x3D;
+        public const uint   AEMode_BackgroundBlur   = 0x3E;
+        public const uint   AEMode_VideoBlog        = 0x3F;
         public const uint   AEMode_Unknown          = 0xffffffff;
 
         /*-----------------------------------------------------------------------------
@@ -523,16 +575,17 @@ namespace Canon.Eos.Framework.Internal.SDK
 		/*-----------------------------------------------------------------------------
 		 EVF Output Device [Flag]
 		-----------------------------------------------------------------------------*/
-        public const uint   EvfOutputDevice_TFT			= 1;
-        public const uint   EvfOutputDevice_PC			= 2;
+        public const uint   EvfOutputDevice_TFT			= 0x01;
+        public const uint   EvfOutputDevice_PC			= 0x02;
+        public const uint   EvfOutputDevice_PC_Small	= 0x08;
 
 
 		/*-----------------------------------------------------------------------------
 		 EVF Zoom
 		-----------------------------------------------------------------------------*/
-        public const int   EvfZoom_Fit			= 1;
-        public const int   EvfZoom_x5			= 5;
-		public const int	EvfZoom_x10			= 10;
+        public const int    EvfZoom_Fit			= 1;
+        public const int    EvfZoom_x5			= 5;
+		public const int    EvfZoom_x10			= 10;
 
         public enum EdsEvfAFMode : uint
         {
@@ -540,6 +593,9 @@ namespace Canon.Eos.Framework.Internal.SDK
             Evf_AFMode_Live     = 1,
             Evf_AFMode_LiveFace = 2,
 			Evf_AFMode_LiveMulti = 3,
+            Evf_AFMode_LiveZone = 4,
+            Evf_AFMode_LiveCatchAF = 9,
+            Evf_AFMode_LiveSpotAF = 10
         }
 
         /*-----------------------------------------------------------------------------
@@ -562,14 +618,46 @@ namespace Canon.Eos.Framework.Internal.SDK
 	        kEdsETTL2ModeAverage		= 1,
         }
 
+		/*-----------------------------------------------------------------------------
+		 DC Strobe
+		-----------------------------------------------------------------------------*/
+        public enum DcStrobe : uint
+        {
+            DcStrobeAuto         = 0,
+            DcStrobeOn			 = 1,
+            DcStrobeSlowsynchro	 = 2,
+            DcStrobeOff			 = 3,
+        }
+
+		/*-----------------------------------------------------------------------------
+		 DC Lens Barrel State
+		-----------------------------------------------------------------------------*/
+        public enum DcLensBarrelState : uint
+        {
+            DcLensBarrelStateInner = 0,
+            DcLensBarrelStateOuter = 1,
+        }
+        
+		/*-----------------------------------------------------------------------------
+		 DC Remote Shooting Mode
+		-----------------------------------------------------------------------------*/
+        public enum DcRemoteShootingMode : uint
+        {
+            DcRemoteShootingModeStop	 = 0,
+            DcRemoteShootingModeStart	 = 1,
+        }
+
         public enum ImageQuality : uint
         {
 			/* Jpeg Only */
-			EdsImageQuality_LJ = 0x0010ff0f,	/* Jpeg Large */
-			EdsImageQuality_M1J = 0x0510ff0f,	/* Jpeg Middle1 */
+			EdsImageQuality_LJ = 0x0010ff0f,    /* Jpeg Large */
+            EdsImageQuality_MJ = 0x0110ff0f,   /* Jpeg Middle */
+            EdsImageQuality_M1J = 0x0510ff0f,	/* Jpeg Middle1 */
 			EdsImageQuality_M2J = 0x0610ff0f,	/* Jpeg Middle2 */
-			EdsImageQuality_SJ = 0x0210ff0f,	/* Jpeg Small */
-			EdsImageQuality_LJF = 0x0013ff0f,	/* Jpeg Large Fine */
+			EdsImageQuality_SJ = 0x0210ff0f,    /* Jpeg Small */
+            EdsImageQuality_S1J = 0x0e10ff0f,    /* Jpeg Small1 */
+			EdsImageQuality_S2J = 0x0f10ff0f,    /* Jpeg Small2 */
+            EdsImageQuality_LJF = 0x0013ff0f,	/* Jpeg Large Fine */
 			EdsImageQuality_LJN = 0x0012ff0f,	/* Jpeg Large Normal */
 			EdsImageQuality_MJF = 0x0113ff0f,	/* Jpeg Middle Fine */
 			EdsImageQuality_MJN = 0x0112ff0f,	/* Jpeg Middle Normal */
@@ -593,13 +681,16 @@ namespace Canon.Eos.Framework.Internal.SDK
 			EdsImageQuality_LRS2JF = 0x00640F13,	/* RAW + Jpeg Small2 */
 			EdsImageQuality_LRS3JF = 0x00641013,	/* RAW + Jpeg Small3 */
 
-			EdsImageQuality_LRLJ = 0x00640010,	/* RAW + Jpeg Large */
-			EdsImageQuality_LRM1J = 0x00640510,	/* RAW + Jpeg Middle1 */
+			EdsImageQuality_LRLJ = 0x00640010,  /* RAW + Jpeg Large */
+            EdsImageQuality_LRMJ = 0x00640110,  /* RAW + Jpeg Middle */
+            EdsImageQuality_LRM1J = 0x00640510,	/* RAW + Jpeg Middle1 */
 			EdsImageQuality_LRM2J = 0x00640610,	/* RAW + Jpeg Middle2 */
-			EdsImageQuality_LRSJ = 0x00640210,	/* RAW + Jpeg Small */
+			EdsImageQuality_LRSJ = 0x00640210,  /* RAW + Jpeg Small */
+            EdsImageQuality_LRS1J = 0x00640e10,  /* RAW + Jpeg Small1 */
+            EdsImageQuality_LRS2J = 0x00640f10,	/* RAW + Jpeg Small2 */
 
-			/* MRAW(SRAW1) + Jpeg */
-			EdsImageQuality_MR = 0x0164ff0f,	/* MRAW(SRAW1) */
+            /* MRAW(SRAW1) + Jpeg */
+            EdsImageQuality_MR = 0x0164ff0f,	/* MRAW(SRAW1) */
 			EdsImageQuality_MRLJF = 0x01640013,	/* MRAW(SRAW1) + Jpeg Large Fine */
 			EdsImageQuality_MRLJN = 0x01640012,	/* MRAW(SRAW1) + Jpeg Large Normal */
 			EdsImageQuality_MRMJF = 0x01640113,	/* MRAW(SRAW1) + Jpeg Middle Fine */
@@ -634,37 +725,59 @@ namespace Canon.Eos.Framework.Internal.SDK
 			EdsImageQuality_SRM2J = 0x02640610,	/* SRAW(SRAW2) + Jpeg Middle2 */
 			EdsImageQuality_SRSJ = 0x02640210,	/* SRAW(SRAW2) + Jpeg Small */
 
-			EdsImageQuality_Unknown = 0xffffffff,
-        }
+			/* CRAW + Jpeg */
+			EdsImageQuality_CR		=	0x0063ff0f,	/* CRAW */
+			EdsImageQuality_CRLJF	=	0x00630013,	/* CRAW + Jpeg Large Fine */
+			EdsImageQuality_CRMJF	=	0x00630113,	/* CRAW + Jpeg Middle Fine  */
+			EdsImageQuality_CRM1JF	=	0x00630513,	/* CRAW + Jpeg Middle1 Fine  */
+			EdsImageQuality_CRM2JF	=	0x00630613,	/* CRAW + Jpeg Middle2 Fine  */
+			EdsImageQuality_CRSJF	=	0x00630213,	/* CRAW + Jpeg Small Fine  */
+			EdsImageQuality_CRS1JF	=	0x00630E13,	/* CRAW + Jpeg Small1 Fine  */
+			EdsImageQuality_CRS2JF	=	0x00630F13,	/* CRAW + Jpeg Small2 Fine  */
+			EdsImageQuality_CRS3JF	=	0x00631013,	/* CRAW + Jpeg Small3 Fine  */
+			EdsImageQuality_CRLJN	=	0x00630012,	/* CRAW + Jpeg Large Normal */
+			EdsImageQuality_CRMJN	=	0x00630112,	/* CRAW + Jpeg Middle Normal */
+			EdsImageQuality_CRM1JN	=	0x00630512,	/* CRAW + Jpeg Middle1 Normal */
+			EdsImageQuality_CRM2JN	=	0x00630612,	/* CRAW + Jpeg Middle2 Normal */
+			EdsImageQuality_CRSJN	=	0x00630212,	/* CRAW + Jpeg Small Normal */
+			EdsImageQuality_CRS1JN	=	0x00630E12,	/* CRAW + Jpeg Small1 Normal */
 
-        public enum ImageQualityForLegacy : uint
-        {
-			kEdsImageQualityForLegacy_LJ = 0x001f000f,	/* Jpeg Large */
-			kEdsImageQualityForLegacy_M1J = 0x051f000f,	/* Jpeg Middle1 */
-			kEdsImageQualityForLegacy_M2J = 0x061f000f,	/* Jpeg Middle2 */
-			kEdsImageQualityForLegacy_SJ = 0x021f000f,	/* Jpeg Small */
-			kEdsImageQualityForLegacy_LJF = 0x00130000,	/* Jpeg Large Fine */
-			kEdsImageQualityForLegacy_LJN = 0x00120000,	/* Jpeg Large Normal */
-			kEdsImageQualityForLegacy_MJF = 0x01130000,	/* Jpeg Middle Fine */
-			kEdsImageQualityForLegacy_MJN = 0x01120000,	/* Jpeg Middle Normal */
-			kEdsImageQualityForLegacy_SJF = 0x02130000,	/* Jpeg Small Fine */
-			kEdsImageQualityForLegacy_SJN = 0x02120000,	/* Jpeg Small Normal */
+			EdsImageQuality_CRLJ	=	0x00630010, /* CRAW + Jpeg Large */
+            EdsImageQuality_CRMJ    =   0x00630110, /* CRAW + Jpeg Middle */
+            EdsImageQuality_CRM1J	=	0x00630510,	/* CRAW + Jpeg Middle1 */
+			EdsImageQuality_CRM2J	=	0x00630610,	/* CRAW + Jpeg Middle2 */
+			EdsImageQuality_CRSJ	=	0x00630210, /* CRAW + Jpeg Small */
+            EdsImageQuality_CRS1J   =   0x00630e10, /* CRAW + Jpeg Small1 */
+            EdsImageQuality_CRS2J   =   0x00630f10,	/* CRAW + Jpeg Small2 */
 
-			kEdsImageQualityForLegacy_LR = 0x00240000,	/* RAW */
-			kEdsImageQualityForLegacy_LRLJF = 0x00240013,	/* RAW + Jpeg Large Fine */
-			kEdsImageQualityForLegacy_LRLJN = 0x00240012,	/* RAW + Jpeg Large Normal */
-			kEdsImageQualityForLegacy_LRMJF = 0x00240113,	/* RAW + Jpeg Middle Fine */
-			kEdsImageQualityForLegacy_LRMJN = 0x00240112,	/* RAW + Jpeg Middle Normal */
-			kEdsImageQualityForLegacy_LRSJF = 0x00240213,	/* RAW + Jpeg Small Fine */
-			kEdsImageQualityForLegacy_LRSJN = 0x00240212,	/* RAW + Jpeg Small Normal */
+            /* HEIF */
+            EdsImageQuality_HEIFL   =   0x0080ff0f,	/* HEIF Large */
+			EdsImageQuality_RHEIFL  =   0x00640080, /* RAW  + HEIF Large */
+			EdsImageQuality_CRHEIFL =   0x00630080, /* CRAW + HEIF Large */
 
-			kEdsImageQualityForLegacy_LR2 = 0x002f000f,	/* RAW */
-			kEdsImageQualityForLegacy_LR2LJ = 0x002f001f,	/* RAW + Jpeg Large */
-			kEdsImageQualityForLegacy_LR2M1J = 0x002f051f,	/* RAW + Jpeg Middle1 */
-			kEdsImageQualityForLegacy_LR2M2J = 0x002f061f,	/* RAW + Jpeg Middle2 */
-			kEdsImageQualityForLegacy_LR2SJ = 0x002f021f,	/* RAW + Jpeg Small */
+            EdsImageQuality_HEIFLF    = 0x0083ff0f, /* HEIF Large Fine */
+            EdsImageQuality_HEIFLN    = 0x0082ff0f, /* HEIF Large Normal */
+            EdsImageQuality_HEIFMF    = 0x0183ff0f, /* HEIF Middle Fine */
+            EdsImageQuality_HEIFMN    = 0x0182ff0f, /* HEIF Middle Normal */
+            EdsImageQuality_HEIFS1F   = 0x0e83ff0f, /* HEIF Small1 Fine */
+            EdsImageQuality_HEIFS1N   = 0x0e82ff0f, /* HEIF Small1 Normal */
+            EdsImageQuality_HEIFS2F   = 0x0f83ff0f, /* HEIF Small2 Fine */
+            EdsImageQuality_RHEIFLF   = 0x00640083, /* RAW + HEIF Large Fine */
+            EdsImageQuality_RHEIFLN   = 0x00640082, /* RAW + HEIF Large Normal */
+            EdsImageQuality_RHEIFMF   = 0x00640183, /* RAW + HEIF Middle Fine */
+            EdsImageQuality_RHEIFMN   = 0x00640182, /* RAW + HEIF Middle Normal */
+            EdsImageQuality_RHEIFS1F  = 0x00640e83, /* RAW + HEIF Small1 Fine */
+            EdsImageQuality_RHEIFS1N  = 0x00640e82, /* RAW + HEIF Small1 Normal */
+            EdsImageQuality_RHEIFS2F  = 0x00640f83, /* RAW + HEIF Small2 Fine */
+            EdsImageQuality_CRHEIFLF  = 0x00630083, /* CRAW + HEIF Large Fine */
+            EdsImageQuality_CRHEIFLN  = 0x00630082, /* CRAW + HEIF Large Normal */
+            EdsImageQuality_CRHEIFMF  = 0x00630183, /* CRAW + HEIF Middle Fine */
+            EdsImageQuality_CRHEIFMN  = 0x00630182, /* CRAW + HEIF Middle Normal */
+            EdsImageQuality_CRHEIFS1F = 0x00630e83, /* CRAW + HEIF Small1 Fine */
+            EdsImageQuality_CRHEIFS1N = 0x00630e82, /* CRAW + HEIF Small1 Normal */
+            EdsImageQuality_CRHEIFS2F = 0x00630f83, /* CRAW + HEIF Small2 Fine */
 
-			kEdsImageQualityForLegacy_Unknown = 0xffffffff,
+            EdsImageQuality_Unknown = 0xffffffff,
         }
 
         #endregion
@@ -840,9 +953,6 @@ namespace Canon.Eos.Framework.Internal.SDK
         public const uint   StateEvent_InternalError            = 0x00000306;
 
         public const uint   StateEvent_AfResult                  = 0x00000309;
-
-
-		public const uint StateEvent_BulbExposureTime			= 0x00000310;	
 
         #endregion
 
@@ -1045,13 +1155,60 @@ namespace Canon.Eos.Framework.Internal.SDK
         }
 
         public static uint EdsGetPropertyData(IntPtr inRef, uint inPropertyID, int inParam,
-             out Edsdk.EdsTime outPropertyData)
+             out EDSDK.EdsTime outPropertyData)
         {
-            int size = Marshal.SizeOf(typeof(Edsdk.EdsTime));
+            int size = Marshal.SizeOf(typeof(EDSDK.EdsTime));
             IntPtr ptr = Marshal.AllocHGlobal(size);
             uint err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
 
-            outPropertyData = (Edsdk.EdsTime)Marshal.PtrToStructure(ptr, typeof(Edsdk.EdsTime));
+            outPropertyData = (EDSDK.EdsTime)Marshal.PtrToStructure(ptr, typeof(EDSDK.EdsTime));
+            Marshal.FreeHGlobal(ptr);
+            return err;
+        }
+
+        public static uint EdsGetPropertyData(IntPtr inRef, uint inPropertyID, int inParam,
+             out EDSDK.EdsFocusInfo outPropertyData)
+        {
+            int size = Marshal.SizeOf(typeof(EDSDK.EdsFocusInfo));
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            uint err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
+
+            outPropertyData = (EDSDK.EdsFocusInfo)Marshal.PtrToStructure(ptr, typeof(EDSDK.EdsFocusInfo));
+            Marshal.FreeHGlobal(ptr);
+            return err;
+        }
+        public static uint EdsGetPropertyData(IntPtr inRef, uint inPropertyID, int inParam,
+            out EDSDK.EdsPoint outPropertyData)
+        {
+            int size = Marshal.SizeOf(typeof(EDSDK.EdsPoint));
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            uint err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
+
+            outPropertyData = (EDSDK.EdsPoint)Marshal.PtrToStructure(ptr, typeof(EDSDK.EdsPoint));
+            Marshal.FreeHGlobal(ptr);
+            return err;
+        }
+
+        public static uint EdsGetPropertyData(IntPtr inRef, uint inPropertyID, int inParam,
+            out EDSDK.EdsRect outPropertyData)
+        {
+            int size = Marshal.SizeOf(typeof(EDSDK.EdsRect));
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            uint err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
+
+            outPropertyData = (EDSDK.EdsRect)Marshal.PtrToStructure(ptr, typeof(EDSDK.EdsRect));
+            Marshal.FreeHGlobal(ptr);
+            return err;
+        }
+
+        public static uint EdsGetPropertyData(IntPtr inRef, uint inPropertyID, int inParam,
+            out EDSDK.EdsSize outPropertyData)
+        {
+            int size = Marshal.SizeOf(typeof(EDSDK.EdsSize));
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            uint err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
+
+            outPropertyData = (EDSDK.EdsSize)Marshal.PtrToStructure(ptr, typeof(EDSDK.EdsSize));
             Marshal.FreeHGlobal(ptr);
             return err;
         }
@@ -1066,7 +1223,103 @@ namespace Canon.Eos.Framework.Internal.SDK
 
             return err;
         }
+
+        public static uint EdsGetPropertyData(IntPtr inRef, uint inPropertyID, int inParam, out int[] outPropertyData)
+        {
+            int size;
+            EDSDKLib.EDSDK.EdsDataType type;
+            EDSDK.EdsGetPropertySize(inRef, inPropertyID, 0, out type, out size);
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            uint err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
+            int len = size / 4;
+            outPropertyData = new int[len];
+            Marshal.Copy(ptr, outPropertyData, 0, len);
+
+            Marshal.FreeHGlobal(ptr);
+            return err;
+        }
+
+        public static uint EdsGetPropertyData(IntPtr inRef, uint inPropertyID, int inParam, out EDSDK.EdsCameraPos outPropertyData)
+        {
+            int size = Marshal.SizeOf(typeof(EDSDK.EdsCameraPos));
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            uint err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
+
+            outPropertyData = (EDSDK.EdsCameraPos)Marshal.PtrToStructure(ptr, typeof(EDSDK.EdsCameraPos));
+            Marshal.FreeHGlobal(ptr);
+            return err;
+        }
+
+        public static uint EdsGetPropertyData(IntPtr inRef, uint inPropertyID, int inParam, out EDSDK.FocusShiftSetting outPropertyData)
+        {
+            int size = Marshal.SizeOf(typeof(EDSDK.FocusShiftSetting));
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            uint err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
+
+            outPropertyData = (EDSDK.FocusShiftSetting)Marshal.PtrToStructure(ptr, typeof(EDSDK.FocusShiftSetting));
+            Marshal.FreeHGlobal(ptr);
+            return err;
+        }
+
+        public static uint EdsGetPropertyData(IntPtr inRef, uint inPropertyID, int inParam, out byte[] outPropertyData)
+        {
+            int size;
+            EDSDKLib.EDSDK.EdsDataType type;
+            EDSDK.EdsGetPropertySize(inRef, inPropertyID, 0, out type, out size);
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            uint err = EdsGetPropertyData(inRef, inPropertyID, inParam, size, ptr);
+
+            int len = size;
+            outPropertyData = new byte[len];
+            Marshal.Copy(ptr, outPropertyData, 0, len);
+            Marshal.FreeHGlobal(ptr);
+            return err;
+        }
         #endregion
+
+        public static byte[] ConvertMWB(EdsManualWBData pcwb)
+        {
+            int headerSize = 40;
+            int MWBHEADERSIZE = (sizeof(uint) * 3);
+
+            int datasize = (int)pcwb.dataSize;
+            // Since the pointer is copied by the following StructureToPtr,
+            // if the data size is less than the pointer size, the buffer is enlarged.
+            if (datasize < IntPtr.Size)
+                datasize = IntPtr.Size;
+
+            int size = (int)pcwb.dataSize + MWBHEADERSIZE + headerSize;
+            IntPtr ptr = Marshal.AllocHGlobal(datasize + headerSize);
+            pcwb.dataSize += (uint)MWBHEADERSIZE;
+            Marshal.StructureToPtr(pcwb, ptr, true);
+            pcwb.dataSize -= (uint)MWBHEADERSIZE;
+            byte[] buff = new byte[size];
+            Marshal.Copy(ptr, buff, 0, headerSize);
+            int i = 0;
+            for (i = 0; i < MWBHEADERSIZE; i++)
+                buff[headerSize + i] = 0;
+
+            for (int j = 0; j < pcwb.dataSize; j++)
+            {
+                buff[headerSize + i + j] = (byte)pcwb.data[j];
+            }
+            Marshal.FreeHGlobal(ptr);
+            return buff;
+        }
+
+        public static EdsManualWBData MarshalPtrToManualWBData(IntPtr ptr)
+        {
+            EdsManualWBData userdata = (EdsManualWBData)Marshal.PtrToStructure(ptr, typeof(EdsManualWBData));
+            int headerSize = 40;
+            byte[] tmp = new byte[userdata.dataSize + headerSize];
+            userdata.data = new byte[userdata.dataSize];
+            Marshal.Copy(ptr, tmp, 0, (int)userdata.dataSize + headerSize);
+            for (int i = 0; i < userdata.dataSize; i++)
+            {
+                userdata.data[i] = tmp[headerSize + i];
+            }
+            return userdata;
+        }
 
         /*-----------------------------------------------------------------------------
         //
@@ -1536,7 +1789,7 @@ namespace Canon.Eos.Framework.Internal.SDK
         //  Returns:    Any of the sdk errors.
         -----------------------------------------------------------------------------*/
         [DllImport("EDSDK.dll")]
-        public extern static uint EdsCreateMemoryStreamFromPointer(byte[] inUserBuffer,
+        public extern static uint EdsCreateMemoryStreamFromPointer( IntPtr inUserBuffer,
              UInt64 inBufferSize, out IntPtr outStream);
 
         /*-----------------------------------------------------------------------------
@@ -1769,10 +2022,6 @@ namespace Canon.Eos.Framework.Internal.SDK
         //                                  A thumbnail image 
         //                      kEdsImageSrc_Preview
         //                                  A preview image
-        //                      kEdsImageSrc_RAWThumbnail
-        //                                  A RAW thumbnail image 
-        //                      kEdsImageSrc_RAWFullView
-        //                                  A RAW full-sized image 
         //       Out:    outImageInfo - Stores the image data information designated 
         //                      in inImageSource. 
         //
@@ -1825,72 +2074,6 @@ namespace Canon.Eos.Framework.Internal.SDK
         [DllImport("EDSDK.dll")]
         public extern static uint EdsGetImage( IntPtr inImageRef, EdsImageSource inImageSource,
              EdsTargetImageType inImageType, EdsRect inSrcRect, EdsSize inDstSize, IntPtr outStreamRef );
-    
-        /*-----------------------------------------------------------------------------
-        //
-        //  Function:   EdsSaveImage            
-        //
-        //  Description:
-        //      Saves as a designated image type after RAW processing. 
-        //      When saving with JPEG compression, 
-        //          the JPEG quality setting applies with respect to EdsOptionRef.
-        //
-        //  Parameters:
-        //      In:    
-        //          inImageRef - Designate the image object for which to produce the file. 
-        //          inImageType - Designate the image type to produce. Designate the 
-        //                  following image types.
-        //
-        //                  kEdsTargetImageType - Jpeg  JPEG
-        //                  kEdsTargetImageType - TIFF  8-bit TIFF
-        //                  kEdsTargetImageType - TIFF16    16-bit TIFF
-        //          inSaveSetting - Designate saving options, such as JPEG image quality.
-        //      Out:    
-        //          outStreamRef - Specifies the output file stream. The memory stream 
-        //                  cannot be specified here.
-        //  Returns:    Any of the sdk errors.
-        -----------------------------------------------------------------------------*/ 
-        [DllImport("EDSDK.dll")]
-        public extern static uint EdsSaveImage( IntPtr inImageRef, EdsTargetImageType inImageType,
-             EdsSaveImageSetting inSaveSetting, IntPtr outStreamRef );
-
-        /*-----------------------------------------------------------------------------
-        //
-        //  Function:   EdsCacheImage                       
-        //
-        //  Description:
-        //      Switches a setting on and off for creation of an image cache in the SDK 
-        //          for a designated image object during extraction (processing) of
-        //          the image data. 
-        //          Creating the cache increases the processing speed, starting from
-        //          the second time.
-        //
-        //  Parameters:
-        //      In:     inImageRef - The reference of the image.
-        //              inUseCache - If cache image data or not
-        //                          If set to FALSE, the cached image data will released.
-        //      Out:    None
-        //
-        //  Returns:    Any of the sdk errors.
-        -----------------------------------------------------------------------------*/
-        [DllImport("EDSDK.dll")]
-        public extern static uint EdsCacheImage( IntPtr inImageRef, bool inUseCache );
-
-        /*-----------------------------------------------------------------------------
-        //
-        //  Function:   EdsReflectImageProperty         
-        //  Description:
-        //      Incorporates image object property changes 
-        //          (effected by means of EdsSetPropertyData) in the stream. 
-        //
-        //  Parameters:
-        //      In:     inImageRef - The reference of the image.
-        //      Out:    None
-        //
-        //  Returns:    Any of the sdk errors.
-        -----------------------------------------------------------------------------*/
-        [DllImport("EDSDK.dll")]
-        public extern static uint EdsReflectImageProperty( IntPtr inImageRef );
 
         //----------------------------------------------
         //   Event handler registering functions
@@ -1990,7 +2173,26 @@ namespace Canon.Eos.Framework.Internal.SDK
         public extern static uint EdsSetCameraStateEventHandler( IntPtr inCameraRef, uint inEvnet,
              EdsStateEventHandler  inStateEventHandler, IntPtr inContext );
 
-		/*-----------------------------------------------------------------------------
+        /*-----------------------------------------------------------------------------
+        //
+        //  Function:  EdsSetFramePoint
+        //  Description:
+        //      Specifies the camera's focus and zoom frame position in the LiveView state.
+        //  
+        //  Parameters:
+        //      In:    inCameraRef - Designate the camera object. 
+        //             inFramePoint - Specifies the position coordinates of the zoom and AF 
+        //                 frames of a LiveView image.
+        //             inLockAfFrame - Whether to lock the movement of the frame until the AF-related 
+        //                 camera operation is executed.
+        //      out:   None
+        //
+        //  Returns:   Any of the sdk errors.
+        ------------------------------------------------------------------------------*/
+        [DllImport("EDSDK.dll")]
+        public extern static uint EdsSetFramePoint(IntPtr inCameraRef, EdsSize inFramePoint, bool inLockAfFrame);
+
+        /*-----------------------------------------------------------------------------
 		//
 		//  Function:   EdsCreateEvfImageRef         
 		//  Description:
@@ -2002,7 +2204,7 @@ namespace Canon.Eos.Framework.Internal.SDK
 		//
 		//  Returns:    Any of the sdk errors.
 		-----------------------------------------------------------------------------*/
-		[DllImport("EDSDK.dll")]
+        [DllImport("EDSDK.dll")]
 		public extern static uint EdsCreateEvfImageRef(IntPtr inStreamRef, out IntPtr outEvfImageRef);
 
 
@@ -2228,7 +2430,7 @@ namespace Canon.Eos.Framework.Internal.SDK
             public EdsRect          imageRect;  
             public uint             pointNumber;
 
-            [MarshalAs( UnmanagedType.ByValArray, SizeConst=128)]
+            [MarshalAs( UnmanagedType.ByValArray, SizeConst=1053)]
             public EdsFocusPoint[]  focusPoint;
             public uint             executeMode;
         }
@@ -2245,6 +2447,45 @@ namespace Canon.Eos.Framework.Internal.SDK
             public int      Reset;      
         }
 
+        /*-----------------------------------------------------------------------------
+         AngleInformation
+        -----------------------------------------------------------------------------*/
+        [StructLayout(LayoutKind.Sequential)]
+        public struct EdsCameraPos
+        {
+            public int status;
+            public int position;
+            public int rolling;
+            public int pitching;
+        }
+
+        /*-----------------------------------------------------------------------------
+        FocusBractingSetting
+       -----------------------------------------------------------------------------*/
+        [StructLayout(LayoutKind.Sequential)]
+        public struct FocusShiftSetting
+        {
+            public uint Version;
+            public uint FocusShiftFunction;
+            public uint ShootingNumber;
+            public uint StepWidth;
+            public uint ExposureSmoothing;
+        }
+        /*-----------------------------------------------------------------------------
+         Manual WhiteBalance Data
+        -----------------------------------------------------------------------------*/
+        [StructLayout(LayoutKind.Sequential)]
+        public struct EdsManualWBData
+        {
+            public uint Valid;
+            public uint dataSize;
+
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+            public string szCaption;
+
+            [MarshalAs(UnmanagedType.ByValArray)]
+            public byte[] data;
+        }
         #endregion
 
 
